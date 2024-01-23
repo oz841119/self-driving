@@ -6,11 +6,6 @@
     <title>Document</title>
 </head>
 <body style="text-align: end;">
-    <button onclick="addRandomPoint()">Add point</button>
-    <button onclick="addRandomSegment()">Add segment</button>
-    <button onclick="removeRandomSegment()">Remove segment</button>
-    <button onclick="removeRandomPoinit()">Remove point</button>
-    <button onclick="removeAll()">Remove all</button>
     <canvas id="myCanvas" style="background-color: rgb(209, 209, 209)"></canvas>
 
     <script src="js/math/graph.js"></script>
@@ -18,37 +13,6 @@
     <script src="js/primitives/segment.js"></script>
 
     <script>
-        const addRandomPoint = () => {
-            const success = graph.tryAddPoint(new Point(Math.random() * myCanvas.width, Math.random() * myCanvas.height))
-            ctx.clearRect(0, 0, myCanvas.width, myCanvas.height)
-            graph.draw(ctx)
-        }
-        const addRandomSegment = () => {
-            const index1 = Math.floor(Math.random() * graph.points.length)
-            const index2 = Math.floor(Math.random() * graph.points.length)
-            const success = graph.tryAddSegment(new Segment(graph.points[index1], graph.points[index2]))
-            ctx.clearRect(0, 0, myCanvas.width, myCanvas.height)
-            graph.draw(ctx)
-        }
-        const removeRandomSegment = () => {
-            if(graph.segments.length === 0) return
-            const index = Math.floor(Math.random() * graph.segments.length)
-            graph.removeSegment(graph.segments[index])
-            ctx.clearRect(0, 0, myCanvas.width, myCanvas.height)
-            graph.draw(ctx)
-        }
-        const removeRandomPoinit = () => {
-            if(graph.points.length === 0) return
-            const index = Math.floor(Math.random() * graph.points.length)
-            graph.removePoint(graph.points[index])
-            ctx.clearRect(0, 0, myCanvas.width, myCanvas.height)
-            graph.draw(ctx)
-        }
-        const removeAll = () => {
-            graph.dispose()
-            ctx.clearRect(0, 0, myCanvas.width, myCanvas.height)
-            graph.draw(ctx)
-        }
         myCanvas.width = 600
         myCanvas.height = 600
         const p1 = new Point(200, 200)
@@ -60,7 +24,14 @@
         const s3 = new Segment(p1, p4)
         const ctx = myCanvas.getContext('2d')
         const graph = new Graph([p1, p2, p3, p4], [s1, s2, s3])
-        graph.draw(ctx)
+        const graphEditor = new GraphEditor(myCanvas, graph)
+        animate()
+        
+        function animate() {
+            ctx.clearRect(0, 0, myCanvas.width, myCanvas.height)
+            graphEditor.display()
+            requestAnimationFrame(animate)
+        }
     </script>
 </body>
 </html>
